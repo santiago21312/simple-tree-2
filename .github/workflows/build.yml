@@ -1,0 +1,44 @@
+name: Build todas las versiones
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dir: fabric-26.2
+            gradle: current
+          - dir: fabric-26.1
+            gradle: current
+          - dir: forge-26.2
+            gradle: 9.4.0
+          - dir: forge-26.1
+            gradle: 9.4.0
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ matrix.gradle }}
+
+      - name: Compilar ${{ matrix.dir }}
+        working-directory: ${{ matrix.dir }}
+        run: gradle build --no-daemon
+
+      - name: Quitar el jar de código fuente
+        run: rm -f ${{ matrix.dir }}/build/libs/*-sources.jar
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tree-capitator-simple-${{ matrix.dir }}
+          path: ${{ matrix.dir }}/build/libs/*.jar
