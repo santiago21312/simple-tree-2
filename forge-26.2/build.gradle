@@ -1,0 +1,56 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+	id 'net.minecraftforge.gradle' version '7.0.40'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+	archivesName = "tree-capitator-simple-forge-26.2"
+}
+
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(25)
+}
+
+minecraft {
+	runs {
+		configureEach {
+			workingDir.set(file('run'))
+		}
+		client {
+		}
+		server {
+			args '--nogui'
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven minecraft.mavenizer
+	maven fg.forgeMaven
+	maven fg.minecraftLibsMaven
+}
+
+dependencies {
+	implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+}
+
+tasks.named('processResources') {
+	def props = [
+		mod_id     : mod_id,
+		mod_name   : mod_name,
+		mod_version: mod_version,
+	]
+	inputs.properties props
+	filesMatching('META-INF/mods.toml') {
+		expand props
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}

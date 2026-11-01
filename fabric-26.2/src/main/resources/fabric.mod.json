@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "tree_capitator_simple",
+  "version": "${version}",
+  "name": "Tree Capitator Simple",
+  "description": "Agachado (Shift) y con un hacha, al talar la base de un árbol se rompen todos los troncos conectados por encima.",
+  "authors": ["Tu nombre"],
+  "license": "MIT",
+  "icon": "assets/tree_capitator_simple/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.treecapitator.simple.TreeCapitatorSimple"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
